@@ -51,7 +51,6 @@
             android:layout_gravity="center"
             android:background="@drawable/button_selector"
             android:gravity="center"
-            android:onClick="btnClick"
             android:paddingLeft="40dp"
             android:paddingRight="40dp"
             android:text="Go to Calendar"
@@ -131,7 +130,20 @@
                     android:gravity="right"
                     android:text="°C"
                     android:textColor="@android:color/white"
-                    android:textSize="22sp" />
+                    android:textSize="22sp"
+                    android:id="@+id/textView" />
+
+                <ImageView
+                    android:id="@+id/imageView2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginEnd="204dp"
+                    android:layout_marginRight="204dp"
+                    android:onClick="btnClick"
+                    app:srcCompat="@drawable/refresh" />
 
 
             </RelativeLayout>
@@ -176,12 +188,13 @@
                 app:srcCompat="@drawable/rainy_small" />
 
             <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_width="55dp"
+                android:layout_height="55dp"
                 android:gravity="center"
                 android:text="mon"
                 android:textAllCaps="true"
-                android:textColor="#909090" />
+                android:textColor="#909090"
+                android:background="@drawable/blue_bg"/>
         </LinearLayout>
 
         <LinearLayout
@@ -198,7 +211,7 @@
 
             <TextView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="54dp"
                 android:gravity="center"
                 android:text="tue"
                 android:textAllCaps="true"
@@ -219,7 +232,7 @@
 
             <TextView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="53dp"
                 android:gravity="center"
                 android:text="thu"
                 android:textAllCaps="true"
@@ -240,7 +253,7 @@
 
             <TextView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="53dp"
                 android:gravity="center"
                 android:text="fri"
                 android:textAllCaps="true"
