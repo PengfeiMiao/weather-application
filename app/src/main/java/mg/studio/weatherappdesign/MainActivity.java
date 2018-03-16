@@ -1,9 +1,11 @@
 package mg.studio.weatherappdesign;
 
+import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.io.BufferedReader;
@@ -22,6 +24,16 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        /*
+        ImageView iv = (ImageView)findViewById(R.id.imageView2);
+        iv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //android.util.Log.i("匿名内部类", "点击事件");
+                btnClick(view);
+            }
+        });//控件响应方法two
+        */
     }
 
     public void btnClick(View view) {
@@ -55,7 +67,6 @@ public class MainActivity extends AppCompatActivity {
                     return null;
                 }
                 reader = new BufferedReader(new InputStreamReader(inputStream));
-
                 String line;
                 while ((line = reader.readLine()) != null) {
                     // Mainly needed for debugging
