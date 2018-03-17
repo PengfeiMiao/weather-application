@@ -16,7 +16,11 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
+import java.util.Calendar;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -38,6 +42,31 @@ public class MainActivity extends AppCompatActivity {
 
     public void btnClick(View view) {
         new DownloadUpdate().execute();
+        Calendar c = Calendar.getInstance();
+        String tv_date = String.valueOf(c.get(Calendar.MONTH) + 1)+"/"
+                +String.valueOf(c.get(Calendar.DAY_OF_MONTH))+"/"
+                +String.valueOf(c.get(Calendar.YEAR));
+        ((TextView) findViewById(R.id.tv_date)).setText(tv_date);
+        int mWay = c.get(Calendar.DAY_OF_WEEK);// 获取当前日期的星期
+        String week ="";
+        switch(mWay){
+            case 1:
+                week = "SUNDAY";
+            case 2:
+                week = "MONDAY";
+            case 3:
+                week = "TUESDAY";
+            case 4:
+                week = "WEDNESDAY";
+            case 5:
+                week = "THUSDAY";
+            case 6:
+                week = "FRIDAY";
+            case 7:
+                week = "SATURDAY";
+        }
+        ((TextView) findViewById(R.id.week)).setText(week);
+
     }
 
 
@@ -46,7 +75,8 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         protected String doInBackground(String... strings) {
-            String stringUrl = "http://mpianatra.com/Courses/info.txt";
+
+            String stringUrl = "http://www.weather.com.cn/data/sk/101042900.html";
             HttpURLConnection urlConnection = null;
             BufferedReader reader;
 
@@ -93,8 +123,9 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String temperature) {
+            String temp = temperature.substring(temperature.indexOf("temp")+7,temperature.indexOf("WD")-3);
             //Update the temperature displayed
-            ((TextView) findViewById(R.id.temperature_of_the_day)).setText(temperature);
+            ((TextView) findViewById(R.id.temperature_of_the_day)).setText(temp);
         }
     }
 }
