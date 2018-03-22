@@ -129,53 +129,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    /**
-     *  String stringUrl = "https://www.sojson.com/open/api/weather/json.shtml?city="+address;
-     HttpURLConnection urlConnection = null;
-     BufferedReader reader;
-     try {
-     URL url = new URL(stringUrl);
-
-     // Create the request to get the information from the server, and open the connection
-     urlConnection = (HttpURLConnection) url.openConnection();
-     urlConnection.setRequestMethod("GET");
-     urlConnection.connect();
-
-     // Read the input stream into a String
-     InputStream inputStream = urlConnection.getInputStream();
-     StringBuffer buffer = new StringBuffer();
-     if (inputStream == null) {}
-     reader = new BufferedReader(new InputStreamReader(inputStream));
-     String line;
-     while ((line = reader.readLine()) != null) {
-     buffer.append(line + "\n");
-     }
-     if (buffer.length() == 0) {
-     }
-     if (buffer.toString() != null) {
-
-     JSONObject response = new JSONObject(buffer.toString());
-     if (response.optInt("status") == 200) {
-     temp = response.getJSONObject("data").optString("wendu");
-     ((TextView) findViewById(R.id.temperature_of_the_day)).setText(temp);
-     } else if (response.optInt("status") == 400) {
-     ((TextView) findViewById(R.id.temperature_of_the_day)).setText("unknown");
-     }
-     }
-     }catch (JSONException e) {
-     e.printStackTrace();
-     }catch (FileNotFoundException e) {
-     e.printStackTrace();
-     } catch (MalformedURLException e) {
-     e.printStackTrace();
-     } catch (ProtocolException e) {
-     e.printStackTrace();
-     }  catch (IOException e) {
-     e.printStackTrace();
-     } finally {
-     urlConnection.disconnect();
-     }
-     */
     private class TemUpdate extends AsyncTask<String, Void, String> {
 
 
