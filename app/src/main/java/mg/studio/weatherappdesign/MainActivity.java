@@ -44,7 +44,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        //locateCityName(strForeignIP);
         checkNetwork(this);
         refreshDate();
         new DownloadUpdate().execute();
@@ -53,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        getTemp();
+        new TemUpdate().execute();
         /*
         ImageView iv = (ImageView)findViewById(R.id.imageView2);
         iv.setOnClickListener(new View.OnClickListener() {
@@ -69,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
     public void btnRefresh(View view) {
         checkNetwork(this);
         new DownloadUpdate().execute();
-        getTemp();
+        new TemUpdate().execute();
         refreshDate();
     }
 
@@ -130,58 +129,119 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void getTemp(){
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                String stringUrl = "https://www.sojson.com/open/api/weather/json.shtml?city="+address;
-                HttpURLConnection urlConnection = null;
-                BufferedReader reader;
-                try {
-                    URL url = new URL(stringUrl);
+    /**
+     *  String stringUrl = "https://www.sojson.com/open/api/weather/json.shtml?city="+address;
+     HttpURLConnection urlConnection = null;
+     BufferedReader reader;
+     try {
+     URL url = new URL(stringUrl);
 
-                    // Create the request to get the information from the server, and open the connection
-                    urlConnection = (HttpURLConnection) url.openConnection();
-                    urlConnection.setRequestMethod("GET");
-                    urlConnection.connect();
+     // Create the request to get the information from the server, and open the connection
+     urlConnection = (HttpURLConnection) url.openConnection();
+     urlConnection.setRequestMethod("GET");
+     urlConnection.connect();
 
-                    // Read the input stream into a String
-                    InputStream inputStream = urlConnection.getInputStream();
-                    StringBuffer buffer = new StringBuffer();
-                    if (inputStream == null) {}
-                    reader = new BufferedReader(new InputStreamReader(inputStream));
-                    String line;
-                    while ((line = reader.readLine()) != null) {
-                        buffer.append(line + "\n");
-                    }
-                    if (buffer.length() == 0) {
-                    }
-                    if (buffer.toString() != null) {
+     // Read the input stream into a String
+     InputStream inputStream = urlConnection.getInputStream();
+     StringBuffer buffer = new StringBuffer();
+     if (inputStream == null) {}
+     reader = new BufferedReader(new InputStreamReader(inputStream));
+     String line;
+     while ((line = reader.readLine()) != null) {
+     buffer.append(line + "\n");
+     }
+     if (buffer.length() == 0) {
+     }
+     if (buffer.toString() != null) {
 
-                        JSONObject response = new JSONObject(buffer.toString());
-                        if (response.optInt("status") == 200) {
-                            temp = response.getJSONObject("data").optString("wendu");
-                            ((TextView) findViewById(R.id.temperature_of_the_day)).setText(temp);
-                        } else if (response.optInt("status") == 400) {
-                            ((TextView) findViewById(R.id.temperature_of_the_day)).setText("unknown");
-                        }
-                    }
-                }catch (JSONException e) {
-                    e.printStackTrace();
-                }catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                } catch (MalformedURLException e) {
-                    e.printStackTrace();
-                } catch (ProtocolException e) {
-                    e.printStackTrace();
-                }  catch (IOException e) {
-                    e.printStackTrace();
-                } finally {
-                    urlConnection.disconnect();
+     JSONObject response = new JSONObject(buffer.toString());
+     if (response.optInt("status") == 200) {
+     temp = response.getJSONObject("data").optString("wendu");
+     ((TextView) findViewById(R.id.temperature_of_the_day)).setText(temp);
+     } else if (response.optInt("status") == 400) {
+     ((TextView) findViewById(R.id.temperature_of_the_day)).setText("unknown");
+     }
+     }
+     }catch (JSONException e) {
+     e.printStackTrace();
+     }catch (FileNotFoundException e) {
+     e.printStackTrace();
+     } catch (MalformedURLException e) {
+     e.printStackTrace();
+     } catch (ProtocolException e) {
+     e.printStackTrace();
+     }  catch (IOException e) {
+     e.printStackTrace();
+     } finally {
+     urlConnection.disconnect();
+     }
+     */
+    private class TemUpdate extends AsyncTask<String, Void, String> {
+
+
+        @Override
+        protected String doInBackground(String... strings) {
+            String stringUrl = "https://www.sojson.com/open/api/weather/json.shtml?city="+address;
+            HttpURLConnection urlConnection = null;
+            BufferedReader reader;
+
+            try {
+                URL url = new URL(stringUrl);
+
+                // Create the request to get the information from the server, and open the connection
+                urlConnection = (HttpURLConnection) url.openConnection();
+                urlConnection.setRequestMethod("GET");
+                urlConnection.connect();
+
+                // Read the input stream into a String
+                InputStream inputStream = urlConnection.getInputStream();
+                StringBuffer buffer = new StringBuffer();
+                if (inputStream == null) {
+                    // Nothing to do.
+                    return null;
                 }
+                reader = new BufferedReader(new InputStreamReader(inputStream));
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    // Mainly needed for debugging
+                    buffer.append(line + "\n");
+                }
+
+                if (buffer.length() == 0) {
+                    // Stream was empty.  No point in parsing.
+                    return null;
+                }
+                if (buffer.toString() != null) {
+
+                    JSONObject response = new JSONObject(buffer.toString());
+                    if (response.optInt("status") == 200) {
+                        temp = response.getJSONObject("data").optString("wendu");
+                    } else if (response.optInt("status") == 400) {
+                        temp = "err";
+                    }
+                    return temp;
+                }
+            }catch (JSONException e) {
+                e.printStackTrace();
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (ProtocolException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }finally {
+                urlConnection.disconnect();
             }
-        }).start();
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String tempeture) {
+            ((TextView) findViewById(R.id.temperature_of_the_day)).setText(tempeture);
+        }
     }
+
 
     private class DownloadUpdate extends AsyncTask<String, Void, String> {
 
